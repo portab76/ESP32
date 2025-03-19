@@ -48,7 +48,7 @@ const int joy_min = 0;
 const int joy_max = 2000;
 ```
 
-1. **Calibración del punto central**  
+### 1. **Calibración del punto central**  
 
 1 **Suma de lecturas**: Se suman numLecturas valores de cada eje.<br>
 2 **Promedio**: Se divide la suma por numLecturas para obtener el valor central.<br>
@@ -79,7 +79,7 @@ int valor_ajustado = analogRead(JOY1_X) - joy1_x_center;
 
 Esto asegura que, cuando el joystick esté en reposo, el valor ajustado sea cercano a 0.
 
-2. **Calibración de los ejes X e Y**  
+### 2. **Calibración de los ejes X e Y**  
 
 1 Esperar a que las **palancas estén en la posición deseada**.<br>
 2 Tomar múltiples lecturas y **calcular el valor medio**.<br>
@@ -148,14 +148,5 @@ En las lecturas futuras, se multiplica el valor ajustado por el factor de escala
 ```
 int valor_escalado = (int)(valor_ajustado * escala);
 ```
-
-3. **Filtrado y ajuste de valores**  
-   - Los valores se ajustan a un rango de **-100 a 100**.  
-```
-// Rango deseado de salida
-const int output_min = -100;
-const int output_max = 100;
-```
-   - Se implementa un filtro para eliminar pequeñas variaciones y mejorar la precisión.  
 
 🚀 **¡Listo para calibrar tus joysticks con ESP32!** 🎮
