@@ -1,23 +1,26 @@
-# Programa de Calibración de Joysticks Analógicos con ESP32  
+# Calibración Joysticks Analógicos con ESP32  
 
 ## 📌 Descripción  
-Este programa permite leer y calibrar los valores obtenidos de **joysticks analógicos tipo PS2** conectados a una **placa ESP32**. Se procesan los datos de los ejes **X** e **Y**, así como el estado del botón del joystick, mostrando la información en el monitor serie.
+Este programa permite leer y calibrar los valores obtenidos de **joysticks analógicos tipo PS2** conectados a una **placa ESP32 Dev Module**. 
 
 ## 🛠️ Materiales  
 - **ESP32 DevKit V1** + Base de expansión  
 - **2 Joysticks analógicos** (tipo PS2)  
 
-## 🔌 Diagrama de Conexiones  
+<p align="center">
+  <img src="joy01.jpg" alt="ESP32 Pines" width="45%">
+  <img src="joy02.jpg" alt="Joystick" width="45%">
+</p>
 
+## 🔌 Diagrama de Conexiones  
 Cada joystick cuenta con 5 pines principales:  
 
-| **Pin** | **Función** | **Conexión en ESP32** |
-|---------|------------|-----------------------|
-| **VCC** | Alimentación (3.3V o 5V según el modelo) | 3.3V o 5V |
-| **GND** | Tierra | GND |
-| **VRX** | Salida del eje X | GPIO 34 (Joystick 1) / GPIO 36 (Joystick 2) |
-| **VRY** | Salida del eje Y | GPIO 35 (Joystick 1) / GPIO 39 (Joystick 2) |
-| **SW** | Botón del joystick | GPIO 32 (Joystick 1) / GPIO 33 (Joystick 2) |
+| **Pin del Joystick 1** | **ESP32** | **Pin del Joystick 2** || **ESP32**
+| **VCC** | 3.3V o 5V | **VCC** | 3.3V o 5V |
+| **GND** | GND | **GND** | GND | GND |
+| **VRX** | GPIO 34 | **VRX** | GPIO 36 |
+| **VRY** | GPIO 35 | **VRY** | GPIO 39 |
+| **SW** |  GPIO 32 | **SW** | GPIO 33 | 
 
 > **Nota:** Los pines 34, 35, 36 y 39 del ESP32 son **de solo entrada (INPUT_ONLY)** y solo pueden leer señales analógicas.
 
@@ -26,7 +29,7 @@ Cada joystick cuenta con 5 pines principales:
 2. Se detectan las pulsaciones de los botones utilizando pines GPIO digitales.  
 3. Se imprimen los valores obtenidos en el monitor serie para su análisis.  
 
----
+
 
 ## 🎯 Calibración de Joysticks  
 ### 📌 **Valores esperados**  
