@@ -50,9 +50,9 @@ const int joy_max = 2000;
 
 1. **Calibración del punto central**  
 
-1 **Suma de lecturas**: Se suman numLecturas valores de cada eje.
-2 **Promedio**: Se divide la suma por numLecturas para obtener el valor central.
-3 **Ajuste**: Las lecturas futuras se ajustan restando el valor central.
+1 **Suma de lecturas**: Se suman numLecturas valores de cada eje.<br>
+2 **Promedio**: Se divide la suma por numLecturas para obtener el valor central.<br>
+3 **Ajuste**: Las lecturas futuras se ajustan restando el valor central.<br>
 
 - 1.1 Durante la calibración, se toman numLecturas (por ejemplo, 1000) lecturas de cada eje (X e Y) para ambos joysticks. Estas lecturas se suman en las variables:
 ```
@@ -81,9 +81,9 @@ Esto asegura que, cuando el joystick esté en reposo, el valor ajustado sea cerc
 
 2. **Calibración de los ejes X e Y**  
 
-1 Esperar a que las **palancas estén en la posición deseada**.
-2 Tomar múltiples lecturas y **calcular el valor medio**.
-3 **Calcular el factor de escala** para ajustar los valores al rango deseado.
+1 Esperar a que las **palancas estén en la posición deseada**.<br>
+2 Tomar múltiples lecturas y **calcular el valor medio**.<br>
+3 **Calcular el factor de escala** para ajustar los valores al rango deseado.<br>
 4 **Aplicar el factor de escala*** a las lecturas futuras.
 
 - 2.1. Esperar a que las palancas estén en la posición deseada:
