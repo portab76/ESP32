@@ -50,6 +50,10 @@ const int joy_max = 2000;
 
 1. **Calibración del punto central**  
 
+- 1 **Suma de lecturas**: Se suman numLecturas valores de cada eje.
+- 2 **Promedio**: Se divide la suma por numLecturas para obtener el valor central.
+- 3 **Ajuste**: Las lecturas futuras se ajustan restando el valor central.
+
 - 1.1 Durante la calibración, se toman numLecturas (por ejemplo, 1000) lecturas de cada eje (X e Y) para ambos joysticks. Estas lecturas se suman en las variables:
 ```
 sum_joy1_x: Suma de las lecturas del eje X del joystick derecho.
@@ -77,12 +81,12 @@ Esto asegura que, cuando el joystick esté en reposo, el valor ajustado sea cerc
 
 2. **Calibración de los ejes X e Y**  
 
+- 1 Esperar a que las **palancas estén en la posición deseada**.
+- 2 Tomar múltiples lecturas y **calcular el valor medio**.
+- 3 **Calcular el factor de escala** para ajustar los valores al rango deseado.
+- 4 **Aplicar el factor de escala*** a las lecturas futuras.
+
 - 2.1. Esperar a que las palancas estén en la posición deseada:
-
-Para el eje Y (hacia arriba), se espera a que los valores de los ejes Y estén por debajo de -85.
-Para el eje X (hacia la derecha), se espera a que los valores de los ejes X estén por debajo de -85.
-
-Esto se hace para asegurar que las palancas están completamente en la posición deseada antes de comenzar la calibración.
 
 ```
 while (true) {
@@ -98,7 +102,7 @@ while (true) {
 ```
 
 - 2.2. Tomar múltiples lecturas:
-Se toman **numLecturas** (por ejemplo, 1000) lecturas de los ejes X o Y mientras las palancas están en la posición deseada.
+Se toman **numLecturas** lecturas de los ejes X o Y mientras las palancas están en la posición deseada.
 
 Estas lecturas se suman en las variables **sum_joy1_y, sum_joy2_y, sum_joy1_x, o sum_joy2_x**.
 
@@ -147,13 +151,11 @@ int valor_escalado = (int)(valor_ajustado * escala);
 
 3. **Filtrado y ajuste de valores**  
    - Los valores se ajustan a un rango de **-100 a 100**.  
-
 ```
 // Rango deseado de salida
 const int output_min = -100;
 const int output_max = 100;
 ```
-
    - Se implementa un filtro para eliminar pequeñas variaciones y mejorar la precisión.  
 
 🚀 **¡Listo para calibrar tus joysticks con ESP32!** 🎮
