@@ -54,7 +54,7 @@ const int joy_max = 2000;
 2 **Promedio**: Se divide la suma por numLecturas para obtener el valor central.<br>
 3 **Ajuste**: Las lecturas futuras se ajustan restando el valor central.<br>
 
-- 1.1 Durante la calibración, se toman numLecturas (por ejemplo, 1000) lecturas de cada eje (X e Y) para ambos joysticks. Estas lecturas se suman en las variables:
+- 1.1 Durante la calibración, se toman numLecturas (por ejemplo, 1000) lecturas de cada eje (X e Y) para ambos joysticks. Estas lecturas se suman en las variables:<br>
 ```
 sum_joy1_x: Suma de las lecturas del eje X del joystick derecho.
 sum_joy1_y: Suma de las lecturas del eje Y del joystick derecho.
@@ -62,7 +62,7 @@ sum_joy2_x: Suma de las lecturas del eje X del joystick izquierdo.
 sum_joy2_y: Suma de las lecturas del eje Y del joystick izquierdo.
 ```
 
-- 1.2. Cálculo del valor promedio:
+- 1.2. Cálculo del valor promedio:<br>
 Una vez que se han tomado todas las lecturas, se calcula el valor promedio para cada eje dividiendo la suma total por el número de lecturas (numLecturas):
 ```
 joy1_x_center = sum_joy1_x / numLecturas; // Valor central del eje X del joystick derecho
@@ -71,7 +71,7 @@ joy2_x_center = sum_joy2_x / numLecturas; // Valor central del eje X del joystic
 joy2_y_center = sum_joy2_y / numLecturas; // Valor central del eje Y del joystick izquierdo
 ```
 
-- 1.3. Uso del valor central:
+- 1.3. Uso del valor central:<br>
 Una vez calculados los valores centrales, se utilizan para ajustar las lecturas futuras. Por ejemplo, para el eje X del joystick derecho:
 ```
 int valor_ajustado = analogRead(JOY1_X) - joy1_x_center;
@@ -86,7 +86,7 @@ Esto asegura que, cuando el joystick esté en reposo, el valor ajustado sea cerc
 3 **Calcular el factor de escala** para ajustar los valores al rango deseado.<br>
 4 **Aplicar el factor de escala*** a las lecturas futuras.
 
-- 2.1. Esperar a que las palancas estén en la posición deseada:
+- 2.1. Esperar a que las palancas estén en la posición deseada:<br>
 
 ```
 while (true) {
@@ -101,7 +101,7 @@ while (true) {
 }
 ```
 
-- 2.2. Tomar múltiples lecturas:
+- 2.2. Tomar múltiples lecturas:<br>
 Se toman **numLecturas** lecturas de los ejes X o Y mientras las palancas están en la posición deseada.
 
 Estas lecturas se suman en las variables **sum_joy1_y, sum_joy2_y, sum_joy1_x, o sum_joy2_x**.
@@ -125,7 +125,7 @@ for (int i = 0; i < numLecturas; i++) {
 }
 ```
 
-- 2.3. Calcular el valor medio:
+- 2.3. Calcular el valor medio:<br>
 Se calcula el valor medio de las lecturas cuando las palancas están en la posición deseada.
 
 ```
@@ -133,7 +133,7 @@ int joy1_y_min = sum_joy1_y / numLecturas; // Valor medio del eje Y del joystick
 int joy2_y_min = sum_joy2_y / numLecturas; // Valor medio del eje Y del joystick izquierdo
 ```
 
-- 2.4. Calcular el factor de escala:
+- 2.4. Calcular el factor de escala:<br>
 El factor de escala se calcula para ajustar los valores medidos al valor deseado (-100 o 100).
 
 ```
@@ -142,7 +142,7 @@ joy2_y_scale = (float)output_min / ajustarValor(joy2_y_min, joy2_y_center, joy_m
 ```
 Aquí, **output_min** es el valor deseado (-100), y **ajustarValor** convierte el valor medido al rango de salida.
 
-- 2.5. Aplicar el factor de escala:
+- 2.5. Aplicar el factor de escala:<br>
 En las lecturas futuras, se multiplica el valor ajustado por el factor de escala para corregir la desviación.
 
 ```
