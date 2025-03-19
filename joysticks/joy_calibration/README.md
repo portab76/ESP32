@@ -76,12 +76,12 @@ int valor_ajustado = analogRead(JOY1_X) - joy1_x_center;
 Esto asegura que, cuando el joystick esté en reposo, el valor ajustado sea cercano a 0.
 
 2. **Calibración de los ejes X e Y**  
-   - Se solicita al usuario mover los joysticks a los extremos (izquierda/derecha para **X**, arriba/abajo para **Y**).  
-   - Con estas mediciones, se calcula un **factor de escala** que normaliza las lecturas.  
 
 - 2.1. Esperar a que las palancas estén en la posición deseada:
+
 Para el eje Y (hacia arriba), se espera a que los valores de los ejes Y estén por debajo de -85.
 Para el eje X (hacia la derecha), se espera a que los valores de los ejes X estén por debajo de -85.
+
 Esto se hace para asegurar que las palancas están completamente en la posición deseada antes de comenzar la calibración.
 
 ```
