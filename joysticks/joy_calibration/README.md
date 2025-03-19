@@ -23,8 +23,6 @@ Cada joystick cuenta con 5 pines principales:
 | **VRY** | GPIO 35 | **VRY** | GPIO 39 |
 | **SW** |  GPIO 32 | **SW** | GPIO 33 | 
 
-> **Nota:** Los pines 34, 35, 36 y 39 del ESP32 son **de solo entrada (INPUT_ONLY)** y solo pueden leer señales analógicas.
-
 ## ⚙️ Funcionamiento  
 1. Se leen las posiciones **X** e **Y** de ambos joysticks mediante los pines ADC.  
 2. Se detectan las pulsaciones de los botones utilizando pines GPIO digitales.  
@@ -44,9 +42,11 @@ Joystick 1 - X: 928 | Y: 901 | SW: 1 Joystick 2 - X: 880 | Y: 940 | SW: 1
 ### 🔧 **Proceso de calibración**  
 
 Determinamos en el codigo el rango de entrada de los valores que es obtienen en bruto de las lecturas analógicas:
-```// Rango esperado de los joysticks (ajusta según tus joysticks)
+```
+// Rango esperado de los joysticks (ajusta según tus joysticks)
 const int joy_min = 0;
-const int joy_max = 2000;```
+const int joy_max = 2000;
+```
 
 1. **Calibración del punto central**  
 
@@ -84,7 +84,8 @@ Para el eje Y (hacia arriba), se espera a que los valores de los ejes Y estén p
 Para el eje X (hacia la derecha), se espera a que los valores de los ejes X estén por debajo de -85.
 Esto se hace para asegurar que las palancas están completamente en la posición deseada antes de comenzar la calibración.
 
-```while (true) {
+```
+while (true) {
   int joy1_y = ajustarValor(analogRead(JOY1_Y), joy1_y_center, joy_min, joy_max, output_min, output_max);
   int joy2_y = ajustarValor(analogRead(JOY2_Y), joy2_y_center, joy_min, joy_max, output_min, output_max);
 
@@ -93,14 +94,16 @@ Esto se hace para asegurar que las palancas están completamente en la posición
   }
 
   delay(100); // Pequeño delay para no saturar el bucle
-}```
+}
+```
 
 - 2.2. Tomar múltiples lecturas:
 Se toman **numLecturas** (por ejemplo, 1000) lecturas de los ejes X o Y mientras las palancas están en la posición deseada.
 
 Estas lecturas se suman en las variables **sum_joy1_y, sum_joy2_y, sum_joy1_x, o sum_joy2_x**.
 
-```long sum_joy1_y = 0, sum_joy2_y = 0;
+```
+long sum_joy1_y = 0, sum_joy2_y = 0;
 
 for (int i = 0; i < numLecturas; i++) {
   sum_joy1_y += analogRead(JOY1_Y); // Sumar lecturas del eje Y del joystick derecho
@@ -115,19 +118,22 @@ for (int i = 0; i < numLecturas; i++) {
   }
 
   delay(10); // Pequeño delay entre lecturas
-}```
+}
+```
 
 - 2.3. Calcular el valor medio:
 Se calcula el valor medio de las lecturas cuando las palancas están en la posición deseada.
 
-```int joy1_y_min = sum_joy1_y / numLecturas; // Valor medio del eje Y del joystick derecho
+```
+int joy1_y_min = sum_joy1_y / numLecturas; // Valor medio del eje Y del joystick derecho
 int joy2_y_min = sum_joy2_y / numLecturas; // Valor medio del eje Y del joystick izquierdo
 ```
 
 - 2.4. Calcular el factor de escala:
 El factor de escala se calcula para ajustar los valores medidos al valor deseado (-100 o 100).
 
-```joy1_y_scale = (float)output_min / ajustarValor(joy1_y_min, joy1_y_center, joy_min, joy_max, output_min, output_max);
+```
+joy1_y_scale = (float)output_min / ajustarValor(joy1_y_min, joy1_y_center, joy_min, joy_max, output_min, output_max);
 joy2_y_scale = (float)output_min / ajustarValor(joy2_y_min, joy2_y_center, joy_min, joy_max, output_min, output_max);
 ```
 Aquí, **output_min** es el valor deseado (-100), y **ajustarValor** convierte el valor medido al rango de salida.
@@ -135,14 +141,18 @@ Aquí, **output_min** es el valor deseado (-100), y **ajustarValor** convierte e
 - 2.5. Aplicar el factor de escala:
 En las lecturas futuras, se multiplica el valor ajustado por el factor de escala para corregir la desviación.
 
-```int valor_escalado = (int)(valor_ajustado * escala);```
+```
+int valor_escalado = (int)(valor_ajustado * escala);
+```
 
 3. **Filtrado y ajuste de valores**  
    - Los valores se ajustan a un rango de **-100 a 100**.  
 
-```// Rango deseado de salida
+```
+// Rango deseado de salida
 const int output_min = -100;
-const int output_max = 100;```
+const int output_max = 100;
+```
 
    - Se implementa un filtro para eliminar pequeñas variaciones y mejorar la precisión.  
 
