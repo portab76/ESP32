@@ -43,10 +43,8 @@ Joystick 1 - X: 928 | Y: 901 | SW: 1 Joystick 2 - X: 880 | Y: 940 | SW: 1
 ```
 ### 🔧 **Proceso de calibración**  
 1. **Calibración del punto central**  
-   - Se toman múltiples lecturas del joystick en reposo para calcular el **valor promedio** de cada eje.  
-   - Este dato servirá como referencia para ajustar futuras mediciones.  
 
-1.1 Durante la calibración, se toman numLecturas (por ejemplo, 1000) lecturas de cada eje (X e Y) para ambos joysticks. Estas lecturas se suman en las variables:
+- 1.1 Durante la calibración, se toman numLecturas (por ejemplo, 1000) lecturas de cada eje (X e Y) para ambos joysticks. Estas lecturas se suman en las variables:
 ```
 sum_joy1_x: Suma de las lecturas del eje X del joystick derecho.
 sum_joy1_y: Suma de las lecturas del eje Y del joystick derecho.
@@ -54,7 +52,7 @@ sum_joy2_x: Suma de las lecturas del eje X del joystick izquierdo.
 sum_joy2_y: Suma de las lecturas del eje Y del joystick izquierdo.
 ```
 
-1.2. Cálculo del valor promedio:
+- 1.2. Cálculo del valor promedio:
 Una vez que se han tomado todas las lecturas, se calcula el valor promedio para cada eje dividiendo la suma total por el número de lecturas (numLecturas):
 ```
 joy1_x_center = sum_joy1_x / numLecturas; // Valor central del eje X del joystick derecho
@@ -62,14 +60,14 @@ joy1_y_center = sum_joy1_y / numLecturas; // Valor central del eje Y del joystic
 joy2_x_center = sum_joy2_x / numLecturas; // Valor central del eje X del joystick izquierdo
 joy2_y_center = sum_joy2_y / numLecturas; // Valor central del eje Y del joystick izquierdo
 ```
-1.3. Uso del valor central:
+
+- 1.3. Uso del valor central:
 Una vez calculados los valores centrales, se utilizan para ajustar las lecturas futuras. Por ejemplo, para el eje X del joystick derecho:
 ```
 int valor_ajustado = analogRead(JOY1_X) - joy1_x_center;
 ```
 
 Esto asegura que, cuando el joystick esté en reposo, el valor ajustado sea cercano a 0.
-
 
 2. **Calibración de los ejes X e Y**  
    - Se solicita al usuario mover los joysticks a los extremos (izquierda/derecha para **X**, arriba/abajo para **Y**).  
