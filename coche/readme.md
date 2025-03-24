@@ -92,8 +92,7 @@ SOY EL COCHE, MI MAC ADDRESS ES:
 // REPLACE CON LA MAC DEL COCHE
 uint8_t broadcastAddress[] = {0x3C,0x8A,0x1F,0x08,0x8A,0x3C};
 ```
-Reemplaza los valores {0x3C,0x8A,...} con la MAC que apareció en tu Monitor Serie, manteniendo el formato hexadecimal:
-uint8_t broadcastAddress[] = {0xXX,0xXX,0xXX,0xXX,0xXX,0xXX}; 
+Reemplaza los valores {0x3C,0x8A,...} con la MAC que apareció en tu Monitor Serie, manteniendo el formato hexadecimal.
 
 ⚠️ Importante:
 
@@ -102,6 +101,8 @@ Cada ESP32 tiene una MAC única
 Si cambias la placa del coche, deberás actualizar esta dirección
 
 La comunicación solo funcionará cuando ambas placas estén encendidas y emparejadas correctamente
+
+Cada vez que se enciende el sistema es necesario recalibrar los joysticks.
 
 ## 🎥 Demostración
 
