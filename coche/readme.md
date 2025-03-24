@@ -7,7 +7,7 @@
       Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede montar por menos de 10€ con componentes económicos.
     </td>
     <td align="center" width="50%">
-      [![Demo del coche RC con ESP32](https://img.youtube.com/vi/tqV3hXHW25Q/maxresdefault.jpg)](https://youtu.be/tqV3hXHW25Q)
+      [![Demo del coche RC con ESP32](https://www.youtube.com/embed/tqV3hXHW25Q?autoplay=1&mute=1)]
     </td>
   </tr>
 </table>
