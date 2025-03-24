@@ -108,4 +108,4 @@ La comunicación solo funcionará cuando ambas placas estén encendidas y empare
 [Ver video demostrativo en YouTube](https://youtu.be/tqV3hXHW25Q?si=PDJ2eKnVYRg4dnkk)
 
 
-[Ver video auto-reproducible](./img/coche.html)
+[Ver video auto-reproducible](https://elper.es/coche/coche.html)
