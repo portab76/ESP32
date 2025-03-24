@@ -1,6 +1,22 @@
 # Coche RC con ESP32 y Servomotores
 
-Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede montar por menos de 10€ con componentes económicos.
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede montar por menos de 10€ con componentes económicos.
+    </td>
+    <td align="center" width="50%">
+      <div align="center">
+        <a href="https://img.youtube.com/vi/tqV3hXHW25Q/hqdefault.jpg">
+            <img src="https://img.youtube.com/vi/TU_ID_DE_VIDEO/maxresdefault.jpg" width="80%">
+            <br>
+            <strong>▶ Ver demostración</strong>
+        </a>
+      </div>
+    </td>
+  </tr>
+</table>
 
 ## 🚗 Componentes del Coche
 
@@ -16,7 +32,7 @@ Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede m
     </td>
     <td align="center" width="33%">
       <img src="img/coche3.jpg" width="200">
-      <br><em>Vista superior</em>
+      <br><em>Detalle servo</em>
     </td>
   </tr>
 </table>
@@ -55,6 +71,7 @@ Batería 7.2V
 - Conectar GND de fuente externa al GND de la ESP32
 
 ## 🎮 Mando de control
+Se ha montado el mando con 2 joystick pero para manejar el coche con 1 es suficiente.
 
  <img src="img/coche4.jpg" width="300">
 
@@ -101,7 +118,3 @@ Cada ESP32 tiene una MAC única
 Si cambias la placa del coche, deberás actualizar esta dirección
 
 La comunicación solo funcionará cuando ambas placas estén encendidas y emparejadas correctamente
-
-## 🎥 Demostración
-
-[Ver video demostrativo en YouTube](https://youtu.be/tqV3hXHW25Q?si=PDJ2eKnVYRg4dnkk)
