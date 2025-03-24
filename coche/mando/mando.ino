@@ -2,7 +2,7 @@
 #include <esp_now.h>
 #include <esp_wifi.h>
 
-// REPLACE CON LA MAC DEL COCCHE
+// ¡¡¡ REMPLACE CON LA MAC-ADDRESS DEL COCCHE !!!
 uint8_t broadcastAddress[] = {0x3C,0x8A,0x1F,0x08,0x8A,0x3C};
 
 // Structure to send data
@@ -32,11 +32,11 @@ int joy1_y_center = 0;
 int joy2_x_center = 0;
 int joy2_y_center = 0;
 
-// Factores de proporcionalidad para los ejes X e Y
-float joy1_x_scale = 1.0; // Factor de escala para el joystick derecho (eje X)
-float joy2_x_scale = 1.0; // Factor de escala para el joystick izquierdo (eje X)
-float joy1_y_scale = 1.0; // Factor de escala para el joystick derecho (eje Y)
-float joy2_y_scale = 1.0; // Factor de escala para el joystick izquierdo (eje Y)
+// Factores de escala proporcionalidad para los ejes X e Y
+float joy1_x_scale = 1.0;
+float joy2_x_scale = 1.0;
+float joy1_y_scale = 1.0;
+float joy2_y_scale = 1.0;
 
 // Rango esperado de los joysticks (ajusta según tus joysticks)
 const int joy_min = 0;
@@ -74,12 +74,12 @@ void setup() {
   // Imprimir la dirección MAC
   Serial.println("EL COCHE TIENE LA MAC_ADDRESS:");
   for (int i = 0; i < 6; i++) {
-    if (broadcastAddress[i] < 0x10) {  // Añadir un cero inicial si el byte es menor que 0x10
+    if (broadcastAddress[i] < 0x10) {
       Serial.print("0");
     }
-    Serial.print(broadcastAddress[i], HEX);  // Imprimir el byte en formato hexadecimal
+    Serial.print(broadcastAddress[i], HEX);
     if (i < 5) {
-      Serial.print(":");  // Añadir dos puntos entre los bytes, excepto después del último
+      Serial.print(":");
     }
   }
   Serial.println("\t");
@@ -90,7 +90,6 @@ void setup() {
   calibrarPuntoCentral(lecturas_calibracion); 
   calibrarEjeX(lecturas_calibracion); 
   calibrarEjeY(lecturas_calibracion);
-
 
 }
 
@@ -127,18 +126,6 @@ void loop() {
   }  
   delay(100);
 }
-
-void readMacAddress(){
-  uint8_t baseMac[6];
-  esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, baseMac);
-  if (ret == ESP_OK) {
-    Serial.printf("%02x:%02x:%02x:%02x:%02x:%02x\n",
-                  baseMac[0], baseMac[1], baseMac[2],
-                  baseMac[3], baseMac[4], baseMac[5]);
-  } else {
-    Serial.println("Failed to read MAC address");
-  }
-}
  
 // callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
@@ -163,7 +150,6 @@ void calibrarPuntoCentral(int numLecturas) {
       Serial.print(progreso);
       Serial.print("%");
     }
-
     delay(10); 
   }
 
@@ -341,5 +327,17 @@ int ajustarEjeY(int valor, int centro, float escala, int min_entrada, int max_en
   }
 
   return valor_escalado;
+}
+
+void readMacAddress(){
+  uint8_t baseMac[6];
+  esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, baseMac);
+  if (ret == ESP_OK) {
+    Serial.printf("%02x:%02x:%02x:%02x:%02x:%02x\n",
+                  baseMac[0], baseMac[1], baseMac[2],
+                  baseMac[3], baseMac[4], baseMac[5]);
+  } else {
+    Serial.println("Failed to read MAC address");
+  }
 }
 

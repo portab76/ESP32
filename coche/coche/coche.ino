@@ -64,7 +64,7 @@ void setup() {
   parar();
 
   Serial.println("----------------------------------------------------------");
-  Serial.println("SOY EL COCHE, MI MACADDRESS ES:");
+  Serial.println("SOY EL COCHE, MI MAC-ADDRESS ES:");
   readMacAddress();
   Serial.println("----------------------------------------------------------");
   Serial.println("ESP-NOW ComunicationOneWay: Esperando datos...");
