@@ -61,7 +61,6 @@ Se ha montado el mando con 2 joystick pero para manejar el coche con 1 es sufici
 
 ### Componentes necesarios:
 - 1 × Placa ESP32 Dev
-- 1 × Batería 7.2V
 - 1 × Mando de joystick analógico
 
 Las conexiones detalladas del mando están disponibles en:  
