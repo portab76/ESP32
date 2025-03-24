@@ -4,7 +4,18 @@ Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede m
 
 ## 🚗 Componentes del Coche
 
-![Foto del coche](img/coche1.jpg) ![Foto del montaje](img/coche2.jpg)
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="coche1.jpg" width="300">
+      <br><em>Vista frontal del coche</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="coche2.jpg" width="300">
+      <br><em>Vista superior</em>
+    </td>
+  </tr>
+</table>
 
 ### Lista de materiales:
 - 4 × Micro servomotor 360°
