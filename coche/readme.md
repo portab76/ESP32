@@ -7,11 +7,15 @@ Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede m
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="img/coche1.jpg" width="300">
+      <img src="img/coche1.jpg" width="200">
       <br><em>Vista frontal del coche</em>
     </td>
     <td align="center" width="50%">
-      <img src="img/coche2.jpg" width="300">
+      <img src="img/coche2.jpg" width="200">
+      <br><em>Vista superior</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="img/coche3.jpg" width="200">
       <br><em>Vista superior</em>
     </td>
   </tr>
