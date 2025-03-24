@@ -8,9 +8,6 @@
     </td>
     <td align="center" width="50%">
       [![Video](https://img.youtube.com/vi/tqV3hXHW25Q/hqdefault.jpg)](https://www.youtube.com/embed/tqV3hXHW25Q?autoplay=1&mute=1)
-    </td>
-  </tr>
-</table>
 
 <iframe 
   width="560" 
@@ -20,6 +17,13 @@
   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
   allowfullscreen>
 </iframe>
+
+
+    </td>
+  </tr>
+</table>
+
+
 
 ## 🚗 Componentes del Coche
 
