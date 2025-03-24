@@ -75,7 +75,7 @@ El sistema usa comunicación ESP-NOW entre:
 
 ## 🔄 Configuración de la comunicación ESP-NOW
 
-Para que el mando envíe correctamente los datos al coche, es **imprescindible** configurar la dirección MAC del receptor:
+Para que el mando envíe correctamente los datos al coche, es **imprescindible** configurar la dirección MAC del coche:
 
 1. Carga primero el programa `coche.ino` en la ESP32 del coche
 2. Abre el Monitor Serie (115200 baudios)
@@ -106,19 +106,3 @@ La comunicación solo funcionará cuando ambas placas estén encendidas y empare
 ## 🎥 Demostración
 
 [Ver video demostrativo en YouTube](https://youtu.be/tqV3hXHW25Q?si=PDJ2eKnVYRg4dnkk)
-
-
-[Ver video auto-reproducible](https://elper.es/coche/coche.html)
-
-[video](./img/coche.mp4)
-
-<video src="./img/coche.mp4" width="600" autoplay loop muted playsinline></video>
-
-<iframe 
-  width="560" 
-  height="315" 
-  src="https://elper.es/coche/coche.html" 
-  frameborder="0" 
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-  allowfullscreen>
-</iframe>
