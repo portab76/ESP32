@@ -7,7 +7,7 @@
       Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede montar por menos de 10€ con componentes económicos.
     </td>
     <td align="center" width="50%">
-      [![Video](https://img.youtube.com/vi/tqV3hXHW25Q/maxresdefault.jpg)](https://www.youtube.com/embed/tqV3hXHW25Q?autoplay=1&mute=1)
+      [![Video](https://img.youtube.com/vi/tqV3hXHW25Q/hqdefault.jpg)](https://www.youtube.com/embed/tqV3hXHW25Q?autoplay=1&mute=1)
     </td>
   </tr>
 </table>
