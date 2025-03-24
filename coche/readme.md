@@ -52,6 +52,8 @@ Batería 7.2V
 
 ## 🎮 Mando de control
 
+ <img src="img/coche4.jpg" width="300">
+
 ### Componentes necesarios:
 - 1 × Placa ESP32 Dev
 - 1 × Batería 7.2V
@@ -84,10 +86,10 @@ SOY EL COCHE, MI MAC ADDRESS ES:
 ```
 // REPLACE CON LA MAC DEL COCHE
 uint8_t broadcastAddress[] = {0x3C,0x8A,0x1F,0x08,0x8A,0x3C};
-Reemplaza los valores {0x3C,0x8A,...} con la MAC que apareció en tu Monitor Serie, manteniendo el formato hexadecimal:
-
-uint8_t broadcastAddress[] = {0xXX,0xXX,0xXX,0xXX,0xXX,0xXX}; // Tus valores aquí
 ```
+Reemplaza los valores {0x3C,0x8A,...} con la MAC que apareció en tu Monitor Serie, manteniendo el formato hexadecimal:
+uint8_t broadcastAddress[] = {0xXX,0xXX,0xXX,0xXX,0xXX,0xXX}; 
+
 ⚠️ Importante:
 
 Cada ESP32 tiene una MAC única
@@ -98,4 +100,4 @@ La comunicación solo funcionará cuando ambas placas estén encendidas y empare
 
 ## 🎥 Demostración
 
-[Ver video demostrativo en YouTube](VIDEO_A_YOUTUBE)
+[Ver video demostrativo en YouTube](https://youtu.be/tqV3hXHW25Q?si=PDJ2eKnVYRg4dnkk)
