@@ -27,13 +27,13 @@ Proyecto de un coche teledirigido de bajo coste controlado por ESP32. Se puede m
 | Servo 4| Fuente 5V        | GND  | GPIO 22     | Derecha atrás    |
 
 ### Diagrama de alimentación:
-
+```
 Batería 7.2V
 ├── Rojo (+)  → VIN ESP32
 ├── Rojo (+)  → Servos (todos los cables rojos unidos)
 ├── Negro (-) → GND ESP32
 └── Negro (-) → Servos (todos los cables negros unidos)
-
+```
 ⚠️ **Importante:**
 - La ESP32 no puede alimentar 4 servos directamente
 - Usar siempre fuente externa de 5V
