@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cubo 3D - MPU6050</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #cube-container {
+            width: 300px;
+            height: 300px;
+            perspective: 1000px;
+            margin-bottom: 20px;
+        }
+        #cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s linear;
+        }
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+        .front  { background: rgba(255, 0, 0, 0.7);   transform: rotateY(0deg) translateZ(150px); }
+        .back   { background: rgba(0, 255, 0, 0.7);   transform: rotateY(180deg) translateZ(150px); }
+        .right  { background: rgba(0, 0, 255, 0.7);   transform: rotateY(90deg) translateZ(150px); }
+        .left   { background: rgba(255, 255, 0, 0.7); transform: rotateY(-90deg) translateZ(150px); }
+        .top    { background: rgba(255, 0, 255, 0.7); transform: rotateX(90deg) translateZ(150px); }
+        .bottom { background: rgba(0, 255, 255, 0.7); transform: rotateX(-90deg) translateZ(150px); }
+        #data-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+        }
+        .data-row {
+            display: flex;
+            margin: 5px 0;
+        }
+        .data-label {
+            width: 120px;
+            font-weight: bold;
+        }
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .connected { background: green; }
+        .disconnected { background: red; }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="cube-container">
+            <div id="cube">
+                <div class="face front">Frente</div>
+                <div class="face back">Atrás</div>
+                <div class="face right">Derecha</div>
+                <div class="face left">Izquierda</div>
+                <div class="face top">Arriba</div>
+                <div class="face bottom">Abajo</div>
+            </div>
+        </div>
+        <div id="data-display">
+            <div class="data-row">
+                <span class="data-label">Aceleración X:</span>
+                <span id="acc-x">0.00</span> g
+            </div>
+            <div class="data-row">
+                <span class="data-label">Aceleración Y:</span>
+                <span id="acc-y">0.00</span> g
+            </div>
+            <div class="data-row">
+                <span class="data-label">Aceleración Z:</span>
+                <span id="acc-z">0.00</span> g
+            </div>
+            <div class="data-row">
+                <span class="data-label">Giro X:</span>
+                <span id="gyro-x">0.00</span> °/s
+            </div>
+            <div class="data-row">
+                <span class="data-label">Giro Y:</span>
+                <span id="gyro-y">0.00</span> °/s
+            </div>
+            <div class="data-row">
+                <span class="data-label">Giro Z:</span>
+                <span id="gyro-z">0.00</span> °/s
+            </div>
+			<span id="msg"></span>
+        </div>
+        <div id="connection-status" class="connection-status disconnected">Desconectado</div>
+    <button id="recalibrate">Recalibrar</button>
+	</div>
+
+<script>
+// Variables para almacenar la orientación
+let angleX = 0, angleY = 0, angleZ = 0;
+let lastTime = 0;
+const cube = document.getElementById('cube');
+const connectionStatus = document.getElementById('connection-status');
+const alpha = 0.98; // Factor de ponderación (0.98 = 98% giroscopio, 2% acelerómetro)
+// Configuración WebSocket
+const ws = new WebSocket('ws://192.168.23.247:81'); // Cambia por la IP de tu ESP32
+let gyroOffset = { x: 0, y: 0, z: 0 };
+let isCalibrating = true;
+const calibrationSamples = 30; 
+let currentCalibrationSample = 0;
+
+ws.onopen = () => {
+	console.log('Conectado al servidor WebSocket');
+	connectionStatus.textContent = 'Conectado';
+	connectionStatus.className = 'connection-status connected';
+};
+
+ws.onerror = (error) => {
+	console.error('Error en WebSocket:', error);
+	connectionStatus.textContent = 'Error de conexión';
+	connectionStatus.className = 'connection-status disconnected';
+};
+
+ws.onclose = () => {
+	console.log('Conexión WebSocket cerrada');
+	connectionStatus.textContent = 'Desconectado';
+	connectionStatus.className = 'connection-status disconnected';
+};
+
+ws.onmessage = (event) => {
+	try {
+		const data = JSON.parse(event.data);
+		updateDisplay(data);
+		updateCubeOrientation(data); // Usa la nueva función
+	} catch (error) {
+		console.error('Error al procesar datos:', error);
+	}
+};
+
+function updateDisplay(data) {
+	document.getElementById('acc-x').textContent = data.acelerometro.x.toFixed(4);
+	document.getElementById('acc-y').textContent = data.acelerometro.y.toFixed(4);
+	document.getElementById('acc-z').textContent = data.acelerometro.z.toFixed(4);
+	document.getElementById('gyro-x').textContent = data.giroscopio.x.toFixed(2);
+	document.getElementById('gyro-y').textContent = data.giroscopio.y.toFixed(2);
+	document.getElementById('gyro-z').textContent = data.giroscopio.z.toFixed(2);
+}
+
+function calibrateGyro(gyroData) {
+    if (currentCalibrationSample < calibrationSamples) {
+        gyroOffset.x += gyroData.x;
+        gyroOffset.y += gyroData.y;
+        gyroOffset.z += gyroData.z;
+        currentCalibrationSample++;
+        document.getElementById('msg').textContent = `Calibrando... ${currentCalibrationSample}/${calibrationSamples}`;
+        return false; // Continúa calibrando
+    } else {
+        // Calcula el promedio de los offsets
+        gyroOffset.x /= calibrationSamples;
+        gyroOffset.y /= calibrationSamples;
+        gyroOffset.z /= calibrationSamples;
+        document.getElementById('msg').textContent = `Calibrado! Offsets: X=${gyroOffset.x.toFixed(2)}, Y=${gyroOffset.y.toFixed(2)}, Z=${gyroOffset.z.toFixed(2)}`;
+        return true; // Calibración completada
+    }
+}
+
+    document.getElementById('recalibrate').addEventListener('click', () => {
+        isCalibrating = true;
+		currentCalibrationSample = 0;
+    });
+
+
+// Función principal modificada
+function updateCubeOrientation(data) {
+    const now = Date.now();
+    const deltaTime = lastTime ? (now - lastTime) / 1000 : 0.02;
+    lastTime = now;
+
+    // 1. Calibración activa
+    if (isCalibrating) {
+        isCalibrating = !calibrateGyro(data.giroscopio);
+        if (isCalibrating) return;
+    }
+
+    // 2. Aplicar offsets y calcular rotación
+    const correctedGx = data.giroscopio.x - gyroOffset.x;
+    const correctedGy = data.giroscopio.y - gyroOffset.y;
+    const correctedGz = data.giroscopio.z - gyroOffset.z;
+
+    // 3. Integración con filtro complementario
+    const acc = data.acelerometro;
+    if (Math.abs(Math.sqrt(acc.x**2 + acc.y**2 + acc.z**2) - 1) < 0.1) {
+        const tiltX = Math.atan2(acc.y, acc.z) * (180 / Math.PI);
+        const tiltY = Math.atan2(-acc.x, Math.sqrt(acc.y**2 + acc.z**2)) * (180 / Math.PI);
+        
+        angleX = alpha * (angleX + correctedGx * deltaTime) + (1 - alpha) * tiltX;
+        angleY = alpha * (angleY + correctedGy * deltaTime) + (1 - alpha) * tiltY;
+    } else {
+        angleX += correctedGx * deltaTime;
+        angleY += correctedGy * deltaTime;
+    }
+    angleZ += correctedGz * deltaTime;
+
+    // 4. Aplicar rotación
+    cube.style.transform = `rotateX(${angleY}deg) rotateY(${-angleX}deg) rotateZ(${angleZ}deg)`;
+}
+
+// Función para manejar el cierre de la página
+window.addEventListener('beforeunload', () => {
+	ws.close();
+});
+    </script>
+</body>
+</html>

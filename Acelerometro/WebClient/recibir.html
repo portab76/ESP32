@@ -1,0 +1,681 @@
+
+<html>
+<head>
+<title>Study of Scripts Accessing Smartphone Sensors</title>
+<meta name="viewport" 
+content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=false" />
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<style>
+	body {
+		background-color:black;
+		color:white;
+	}
+	td, th{
+		padding-left:5px;
+		padding-right:5px;
+		border: 1px solid black;
+	}
+	#container {
+		width: 250px;
+		height: 150px;
+		background:black;
+		padding-top:25px;
+		perspective: 500px;
+	}
+	.cube {
+		width:100px; height: 100px;
+		margin: 0 auto;
+		transform-style: preserve-3d;
+		transform-origin: 50px 50px 0px;
+	}
+	.cube div.pane {
+		position: absolute;
+		width: 100px;
+		height: 100px;
+		border: 1px solid white;
+		background: -moz-linear-gradient(top, #6db3f2 0%, #54a3ee 45%, #3690f0 75%, #1e69de 100%);
+		background:      linear-gradient(to bottom, #6db3f2 0%, #54a3ee 45%, #3690f0 75%, #1e69de 100%);
+		opacity: 0.8;
+		line-height: 100px;
+		font-size: 25px;
+		font-weight: bold;
+		font-family: Verdana;
+		text-align: center;
+	}
+	.cube .front  { transform:                                 translateZ(50px); }
+	.cube .back   { transform: rotateX(180deg)                 translateZ(50px); }
+	.cube .right  { transform: rotateY( 90deg) rotateZ(-90deg) translateZ(50px); }
+	.cube .left   { transform: rotateY(-90deg) rotateZ( 90deg) translateZ(50px); }
+	.cube .top    { transform: rotateX( 90deg)                 translateZ(50px); }
+	.cube .bottom { transform: rotateX(-90deg)                 translateZ(50px); }
+
+ 	#map {
+        height: 40vh;
+        width: 40vh;
+    }
+	button {
+        padding: 8px 15px;
+        background: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    button:hover {
+        background: #1976D2;
+    }
+	.toolbar {
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 0px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    }
+    .toolbar a {
+        display: inline-block;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px;
+        text-align: center;
+        width: 15px;
+        height: 15px;
+        margin: 5px;
+        cursor: pointer;
+    }
+    .toolbar a:hover {
+        background: #f0f0f0;
+    }
+    .toolbar a img {
+        width: 14px;
+        height: 14px;
+    }	  
+	.main{
+		margin-left:5px;
+	}
+	
+	.badge-warning {
+		color: #212529;
+		background-color: #ffc107;
+	}
+	.badge {
+		display: inline-block;
+		padding: .25em .4em;
+		font-size: 75%;
+		font-weight: 700;
+		line-height: 1;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: baseline;
+		border-radius: .25rem;
+	}
+	.subtab{width:100%;}
+	#resultsTable{width:100%;}
+	/* Estilos para switch */
+    .switch input {
+      display: none;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+    .switch .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .switch .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      border-radius: 50%;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: 0.4s;
+    }
+    .switch input:checked + .slider {
+      background-color: #4CAF50;
+    }
+    .switch input:checked + .slider:before {
+      transform: translateX(20px); 
+    }
+	
+</style>
+</head>
+<body>
+
+<div class="main">
+				
+	<table id="resultsTable" border="1">
+		<tbody>
+			<tr>
+			<td>
+			<div id="container">
+			<div class="cube" id="cube">
+			<div class="pane front" style="background:blue;">I</div>
+			<div class="pane back" style="background:back;">II</div>
+			<div class="pane right" style="background:red;">III</div>
+			<div class="pane left" style="background:green;">IV</div>
+			<div class="pane top" style="background:yellow;">V</div>
+			<div class="pane bottom" style="background:grey;">VI</div>
+			</div>
+			</div>			
+			<div id="mensaje3d"></div>
+			</td>
+			<td style="max-width: 40vh;"> 	
+			BetaX PITCH:
+			<img src="./img/compass.png" id="imgx" width="150">
+			<div id="imgxtxt"></div><div id="imgxmsg">
+			</td>
+			<td>	
+			GammaY YAW:
+			<img src="./img/compass.png" id="imgy" width="150">
+			<div id="imgytxt"></div><div id="imgymsg">
+			</td>
+			<td>	
+			AlphaZ ROLL:
+			<img src="./img/compass.png" id="imgz" width="150">	
+			<div id="imgztxt"></div><div id="imgzmsg">
+			</td>
+			<td >
+			<div id="map">
+				<div class="toolbar" style="position: absolute;top: 10px;right: 10px;">
+				<a id="clearTrail" href="#" role="button"><img src="./img/ico-green-eraser.png" alt="Clear Trail"></a>
+				</div>
+			</div>
+			</td>			
+			</tr>
+			<tr>
+			
+			<td  style="vertical-align: text-top;">
+				<div id="rotacion"></div>
+				<br>
+				<span class="badge badge-warning" id="num-observed-events"><div id="count"></div></span>
+				<button id="calibraNorte">Calibrar</button>
+				
+			</td>
+			
+			<td  style="vertical-align: text-top;"> 
+				<div id="acceleration"></div>
+			</td>
+			<td style="vertical-align: text-top;">
+				<div id="velocity"></div>
+			</td>
+			<td style="vertical-align: text-top;">
+				<div id="velocity2"></div>
+				<div class="toolbar" style="background:black;">
+					<a id="clearMov" href="#" role="button"><img src="./img/ico-green-eraser.png" alt="Clear Trail"></a>
+				</div>
+			</td>
+			<td style="vertical-align: text-top;">
+				<div id="gpstxt"></div>
+			</td>
+			</tr>
+			<tr>			
+			<td colspan="5">
+				<!-- Contenedor del interruptor -->
+				<label class="switch">
+				<input type="checkbox" id="toggleSwitch" checked>
+				<span class="slider"></span>
+				</label>
+				<div id="Acceleration" style="height: 270px; width:100%;"></div>
+			</td>
+			</tr>
+		</tbody>
+	</table>	
+</div>
+
+<script>
+// manejo del mapa
+window.onload = function () {
+ 
+	var marker; 
+	var polyline;
+	var latlngs = []; //trayectoria
+	var rotationAngle = 0;
+	var alpha=0, beta=0, gamma=0;
+	var referenciaNorte3D = { x:0, y: 0, z: 0 };
+	var referenciaNorte2D = { x:0, y: 0, z: 0 };
+	var lat = 0, lng = 0, acc = 0, alt = 0, altacc = 0, hed = 0, spe = 0 ;
+	var lastUpdate = Date.now();
+	var displacementt  = 0,displacementx  = 0,displacementy  = 0,displacementz  = 0;
+	var displacementX = 0, displacementY = 0, displacementZ = 0;			
+	// Constantes para el filtro pasa-bajo
+	var alphaFilter = 0.1; // Más bajo = más suavizado
+	var previousAx = 0, previousAy = 0, previousAz = 0;
+	// chart 
+	var axChart = [];
+	var ayChart = [];
+	var azChart = [];
+	var updateInterval = 100;
+	var dataLength = 50; // Número de puntos de datos visibles
+	var cnt = 0;
+	
+	// Obtiene el elemento checkbox y el span que muestra el estado
+   
+    var switchState = true;
+    function updateState() {
+		switchState = document.getElementById('toggleSwitch').checked;
+    }
+    document.getElementById('toggleSwitch').addEventListener('change', updateState);
+    updateState();
+	
+    var chartAcceleration = new CanvasJS.Chart("Acceleration", {
+        backgroundColor: "#000000", // Fondo negro
+        title: {
+            text: "Acceleracion",
+            fontColor: "#FFFFFF",
+        },
+        axisY: {
+            includeZero: false,
+            labelFontColor: "#FFFFFF",
+        },
+        axisX: {
+            labelFontColor: "#FFFFFF"
+        },
+        data: [
+            {
+                type: "line",
+                xValueFormatString: "#####",
+                yValueFormatString: "####.00",
+                showInLegend: true,
+                name: "X",
+                color: "#FF0000", // Línea roja para 'X'
+                dataPoints: axChart
+            },
+            {
+                type: "line",
+                xValueFormatString: "#####",
+				yValueFormatString: "####.00",
+                
+				showInLegend: true,
+                name: "Y",
+                color: "#00FF00", // Línea verde para 'Y'
+                dataPoints: ayChart
+            },
+            {
+                type: "line",
+				xValueFormatString: "#####",
+                yValueFormatString: "####.00",
+                showInLegend: true,
+                name: "Z",
+                color: "#0000FF", // Línea azul para 'Z'
+                dataPoints: azChart
+            }
+        ]
+    });
+	
+	// Funcin para el filtro pasa-bajo
+	function lowPassFilter(current, previous, alphaFilter) {
+		return alphaFilter * current + (1 - alphaFilter) * previous;
+	}
+
+	const ws = new WebSocket('ws://192.168.23.247:81');
+    ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+        console.log("Datos recibidos:", data);
+		getdata(data);
+	};
+	
+	var cnt = 0; 
+  
+	//setInterval(function() { getdata() }, 100);
+	function getdata(data) 
+	{
+		
+		alpha = round(data.giroscopio.x)*-1;
+		beta = round(data.giroscopio.y);
+		gamma = round(data.giroscopio.z);
+
+		lat = 0;
+		lng = 0; 
+		acc = 0; 
+		alt = 0; 
+		altacc = 0;
+		hed = 0; 
+		spe = 0;
+		
+		document.getElementById("gpstxt").innerHTML = `GPS:<br>
+		  <table class="subtab">
+			<tr><td>Latitud</td><td>${lat}&deg;</td></tr>
+			<tr><td>Longitud</td><td>${lng}&deg;</td></tr>
+			<tr><td>Preci. Lon</td><td>${acc} m</td></tr>
+			<tr><td>Altitud</td><td>${alt} m</td></tr>
+			<tr><td>Preci. Alt</td><td>${altacc} m</td></tr>
+			<tr><td>Rumbo</td><td>${hed}&deg;</td></tr>
+			<tr><td>Velocidad</td><td>${spe} m/s</td></tr>
+		  </table>`;
+
+		document.getElementById("count").innerHTML =	cnt++;
+			
+			
+	// Variables globales
+let filteredAlpha = 0, filteredBeta = 0, filteredGamma = 0;
+const filterFactor = 0.2;  // Ajusta para más/menos suavizado		
+			 // Filtra los datos del giroscopio
+    filteredAlpha = filteredAlpha * (1 - filterFactor) + data.giroscopio.x * filterFactor;
+    filteredBeta = filteredBeta * (1 - filterFactor) + data.giroscopio.y * filterFactor;
+    filteredGamma = filteredGamma * (1 - filterFactor) + data.giroscopio.z * filterFactor;
+    rotate3D(filteredAlpha, filteredBeta, filteredGamma);
+	
+	
+		//rotate3D(alpha, beta, gamma); // CUBO
+		rotate2D(alpha, beta, gamma, 'x','imgx');
+		rotate2D(alpha, beta, gamma, 'y','imgy');
+		rotate2D(alpha, beta, gamma, 'z','imgz');
+		
+		// mapa 
+		if (!marker) {
+		marker = L.marker([lat, lng], { icon: createTriangleIcon(rotationAngle) }).addTo(map);
+		polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);                        
+		
+		} else {
+			marker.setLatLng([lat, lng]);
+		}
+		marker.setIcon(createTriangleIcon(-1*(alpha-referenciaNorte2D.z*-1))); 
+		latlngs.push([lat, lng]);
+		polyline.setLatLngs(latlngs);
+		map.setView([lat, lng]);
+		// calculo de la velocidad y desplazamiento.
+		
+		var ax = data.acelerometro.x; // acceleration.x
+		var ay = data.acelerometro.y; // acceleration.y
+		var az = data.acelerometro.z; // acceleration.z
+		
+		// Aplicar el filtro pasa-bajo para suavizar la aceleracin
+		ax = lowPassFilter(ax, previousAx, alphaFilter);
+		ay = lowPassFilter(ay, previousAy, alphaFilter);
+		az = lowPassFilter(az, previousAz, alphaFilter);
+
+		// Guardar los valores filtrados para la siguiente iteración
+		previousAx = ax;
+		previousAy = ay;
+		previousAz = az;
+		
+		document.getElementById("acceleration").innerHTML = `
+		Aceleracion:<table class="subtab">
+			<tr style="color:#FF0000;"><td>x</td><td>${round(ax)} m/s<sup>2</sup></td></tr>
+			<tr style="color:#00FF00;"><td>y</td><td>${round(ay)} m/s<sup>2</sup></td></tr>
+			<tr style="color:#0000FF;"><td>z</td><td>${round(az)} m/s<sup>2</sup></td></tr>
+		</table>`;
+		
+		/*
+		const now = Date.now();
+		var dt = (now - lastUpdate) / 1000; // Delta time en segundos
+		lastUpdate = now;		
+		*/
+		const deltaTime = 0.1; // sg
+
+		// Integrar aceleración para obtener velocidad
+		var velocityX = ax * deltaTime;
+		var velocityY = ay * deltaTime;
+		var velocityZ = az * deltaTime;
+
+		// Integrar velocidad para obtener desplazamiento
+		displacementX += velocityX * deltaTime;
+		displacementY += velocityY * deltaTime;
+		displacementZ += velocityZ * deltaTime;
+
+		// Calcular desplazamiento total como magnitud 3D
+		var displacementTotal = Math.sqrt(displacementX ** 2 + displacementY ** 2 + displacementZ ** 2);
+
+		document.getElementById("velocity").innerHTML = `
+		Integrar aceleracion para<br> obtener velocidad:
+		<table class="subtab">
+			<tr><td>x</td><td>${velocityX.toFixed(2)} m/s</td></tr>
+			<tr><td>y</td><td>${velocityY.toFixed(2)} m/s</td></tr>
+			<tr><td>z</td><td>${velocityZ.toFixed(2)} m/s</td></tr>
+		</table>`;
+		
+		document.getElementById("velocity2").innerHTML = `
+		Integrar velocidad para<br> obtener movimiento:
+		<table class="subtab">
+			<tr><td>x</td><td>${displacementX.toFixed(2)} m</td></tr>
+			<tr><td>y</td><td>${displacementY.toFixed(2)} m</td></tr>
+			<tr><td>z</td><td>${displacementZ.toFixed(2)} m</td></tr>
+		</table>`;
+		
+		/* GRAFICA */
+		if (switchState==true)
+		{
+			if (axChart.length > dataLength) 
+			{
+				axChart.shift();
+				ayChart.shift();
+				azChart.shift();
+			}
+			const ax1 = { id: 'acceleration_X', x: Number(cnt), y: Number(data.acelerometro.x) };
+			const ay1 = { id: 'acceleration_Y', x: Number(cnt), y: Number(data.acelerometro.y) };
+			const az1 = { id: 'acceleration_Z', x: Number(cnt), y: Number(data.acelerometro.z) };
+			cnt++;
+			axChart.push(ax1);
+			ayChart.push(ay1);
+			azChart.push(az1);
+			chartAcceleration.render();
+		}
+	}
+
+	var map = L.map('map').setView([0, 0], 18);
+	L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+		attribution: 'Tiles © Esri',
+		maxZoom: 25
+	}).addTo(map);
+
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; OpenStreetMap contributors'
+	}).addTo(map);
+
+
+	document.getElementById('clearTrail').addEventListener('click', function(e) {
+		e.preventDefault();
+		latlngs = [];
+		if (polyline) {
+			map.removeLayer(polyline);
+			polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+			showMessage('Ruta borrada correctamente', false);
+		}
+	}); 
+
+	document.getElementById('clearMov').addEventListener('click', function(e) {
+		e.preventDefault();
+		displacementX = 0;
+		displacementY = 0;
+		displacementZ = 0;
+	}); 	
+
+	// BOTON CALIBRAR
+	document.getElementById("calibraNorte").addEventListener("click", function() 
+	{
+		referenciaNortex = parseFloat(document.getElementById("imgxtxt").innerHTML.split("<br>")[1]);
+		referenciaNortey = parseFloat(document.getElementById("imgytxt").innerHTML.split("<br>")[1]);
+		referenciaNortez = parseFloat(document.getElementById("imgztxt").innerHTML.split("<br>")[1]);
+		
+		document.getElementById("imgxmsg").innerHTML = '<br>Calibrado en: <br>' + referenciaNortex.toFixed(2) + '&ordm;';
+		document.getElementById("imgymsg").innerHTML = '<br>Calibrado en: <br>' + referenciaNortey.toFixed(2) + '&ordm;';
+		document.getElementById("imgzmsg").innerHTML = '<br>Calibrado en: <br>' + referenciaNortez.toFixed(2) + '&ordm;';
+		
+		document.getElementById("imgx").style.transform = "rotate(" + (0 - referenciaNortex) + "deg)";
+		document.getElementById("imgy").style.transform = "rotate(" + (0 - referenciaNortey) + "deg)";
+		document.getElementById("imgz").style.transform = "rotate(" + (0 - referenciaNortez) + "deg)";
+
+		referenciaNorte2D = {
+			x: referenciaNortex,
+			y: referenciaNortey,
+			z: referenciaNortez
+		};
+		
+		referenciaNorte3D = {
+			x: alpha,
+			y: beta,
+			z: gamma
+		};
+		
+		document.getElementById("mensaje3d").innerHTML =
+			`<br>Calibrado en: <table class=\"subtab\"><tr><td>BetaX</td><td>${referenciaNorte3D.x.toFixed(3)}&deg;</td></td>` +
+			`<tr><td>GammaY</td><td>${referenciaNorte3D.y.toFixed(3)}&deg;</td><Ttr>` +
+			`<tr><td>AlphaZ</td><td>${referenciaNorte3D.z.toFixed(3)}&deg;</td></tr></table>`;
+
+	});
+	
+	
+	/***************************************************************/
+	/***************************************************************/
+	function rotate3D(alpha, beta, gamma) {
+		
+		alpha=alpha*1;
+		gamma=gamma*1;
+		beta=beta*-1;
+		
+		// CUBO 3D
+		var default_angle = 0;
+		if(screen.mozOrientation == "landscape-primary") 
+			default_angle += -90;
+		else if(screen.mozOrientation == "landscape-secondary") 
+			default_angle += 90;
+		else if(screen.mozOrientation == "portrait-secondary") 
+			default_angle += 180;
+		else	
+			default_angle=-180;
+
+		var axis_y = rotate(Array(1, 0, 0), Array(1, 0, 0), default_angle);
+		var axis_x = rotate(Array(0, 1, 0), Array(0, 1, 0), default_angle);
+		var axis_z = rotate(Array(0, 0, 1), Array(0, 0, 1), default_angle);
+
+		var alpha2 = alpha - referenciaNorte3D.x;
+		var beta2 = beta - referenciaNorte3D.y;
+		var gamma2 = gamma - referenciaNorte3D.z;
+		
+		document.getElementById("cube").style.transform =
+			"rotate3d(" + axis_x[0] + ", " + axis_x[1] + ", " + axis_x[2] + ", " + (alpha2) + "deg) " +
+			"rotate3d(" + axis_y[0] + ", " + axis_y[1] + ", " + axis_y[2] + ", " + (beta2) + "deg) " +
+			"rotate3d(" + axis_z[0] + ", " + axis_z[1] + ", " + axis_z[2] + ", " + (gamma2) + "deg) " +
+			"rotateZ(" + default_angle + "deg)";
+			
+		document.getElementById("rotacion").innerHTML =
+				"Rotacion:<table class=\"subtab\">"+
+				"<tr><td>BetaX</td><td>"+(beta2.toFixed(3))+"&deg;</td></tr>"+
+				"<tr><td>GammaY</td><td>"+(gamma2.toFixed(3))+"&deg;</td></tr>"+
+				"<tr><td>AlphaZ</td><td>"+(alpha2.toFixed(3))+"&deg;</td></tr>"+
+				"</table>";
+	}
+
+	function rotate2D(alpha, beta, gamma, ejeSeleccionado, imagen) {
+		var angulo = 0;
+		var referenciaNorte = 0; 
+		switch (ejeSeleccionado.toLowerCase()) {
+			case 'x':
+				angulo = beta;
+				referenciaNorte = referenciaNorte2D.x;
+				break;
+			case 'y':
+				angulo = gamma;
+				referenciaNorte = referenciaNorte2D.y;
+				break;
+			case 'z':
+				angulo = alpha;
+				referenciaNorte = referenciaNorte2D.z;
+				break;
+			default:
+				console.error('Eje no válido');
+				return;
+		}
+		// Ajuste segun la referencia de calibracion
+		var headingCalibrado = angulo - referenciaNorte;
+		headingCalibrado = ((headingCalibrado % 360) + 360) % 360; // Asegura 0-360
+		// Actualiza la interfaz
+		const direcciones = ['Norte', 'Oeste', 'Sur', 'Este'];
+		const sector = Math.floor(headingCalibrado / 90) % 4;
+		document.getElementById(imagen+"txt").innerHTML = `${direcciones[sector]}<br>${headingCalibrado.toFixed(2)}&ordm;`;
+		document.getElementById(imagen).style.transform = `rotate(${headingCalibrado}deg)`;
+	}
+
+	function rotate(vec, axis, angle) {
+		var c = Math.cos(angle * Math.PI / 180.0),
+			s = Math.sin(angle * Math.PI / 180.0),
+			x = axis[0], y = axis[1], z = axis[2];
+
+		var rm00 = c + x * x * (1 - c),
+			rm10 = z * s + y * x * (1 - c),
+			rm20 = -y * s + z * x * (1 - c),
+			rm01 = -z * s + x * y * (1 - c),
+			rm11 = c + y * y * (1 - c),
+			rm21 = x * s + z * y * (1 - c),
+			rm02 = y * s + x * z * (1 - c),
+			rm12 = -x * s + y * z * (1 - c),
+			rm22 = c + z * z * (1 - c);
+
+		var result = [
+			rm00 * vec[0] + rm01 * vec[1] + rm02 * vec[2],
+			rm10 * vec[0] + rm11 * vec[1] + rm12 * vec[2],
+			rm20 * vec[0] + rm21 * vec[1] + rm22 * vec[2],
+		];
+
+		// Redondear valores muy pequeños a 0
+		return result.map(value => Math.abs(value) < 1e-10 ? 0 : value);
+	}
+
+	function round(x) {
+		return ((x * 10) >> 0) / 10.0;
+	}
+
+	function createTriangleIcon(angle) {
+		return L.divIcon({
+			className: 'custom-marker',
+			html: `
+				<svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+					<polygon points="50,5 85,95 15,95" fill="blue" stroke="black" stroke-width="5"
+						transform="rotate(${angle + 180}, 50, 50)"/>
+				</svg>
+			`,
+			iconSize: [40, 40],
+			iconAnchor: [20, 20] // Centro del icono
+		});
+	}
+
+	function deviceToWorld(ax, ay, az, orientation) {
+		// Convertir ángulos a radianes
+		const yaw = (orientation.alpha * Math.PI) / 180;
+		const pitch = (orientation.beta * Math.PI) / 180;
+		const roll = (orientation.gamma * Math.PI) / 180;
+
+		// Matriz de rotación
+		const cy = Math.cos(yaw), sy = Math.sin(yaw);
+		const cp = Math.cos(pitch), sp = Math.sin(pitch);
+		const cr = Math.cos(roll), sr = Math.sin(roll);
+
+		// Aplicar rotaciones
+		return {
+		  x: ax * (cy * cr + sy * sp * sr) + ay * (sy * sp * cr - cy * sr) + az * (sy * cp),
+		  y: ax * (sy * cr - cy * sp * sr) + ay * (cy * sp * cr + sy * sr) + az * (-cy * cp),
+		  z: ax * (cp * sr) + ay * (cp * cr) + az * sp
+		};
+	}	
+	
+} // end window.onload 
+
+//var vec = [1, 0, 0];
+//var axis = [0, 1, 0]; // Girar alrededor de Y
+//var angle = 90; // Rotación de 90 grados
+//console.log(rotate(vec, axis, angle)); // Debería dar [0, 0, -1] si rota correctamente
+</script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+</body>
+</html>
