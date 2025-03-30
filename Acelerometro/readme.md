@@ -65,7 +65,7 @@ angleX += (gyroX - offsetX) * deltaTime;
 angleX = α*(angleX + gyroX*Δt) + (1-α)*accelAngleX;
 ```
 
-##Formato de Datos
+## Formato de Datos
 El ESP32 envía datos en formato JSON:
 
 ```
@@ -75,7 +75,7 @@ El ESP32 envía datos en formato JSON:
 }
 ```
 
-##Uso
+## Uso
  
  - Cargar firmware al ESP32. 
    - Configurar credenciales WiFi 
