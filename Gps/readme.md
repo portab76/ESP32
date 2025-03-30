@@ -16,7 +16,7 @@ Aplicación Android para monitorear datos GPS a través de Bluetooth Low Energy 
 - Escanea y conecta con dispositivo BLE llamado "DroneGPS_BLE"
 - Implementa lógica para reconstruir mensajes JSON fragmentados
 - Procesa datos GPS con el formato:
-  ```json
+```json
   {
     "la": 12.345678,  // Latitud
     "lo": -12.345678, // Longitud
@@ -24,7 +24,7 @@ Aplicación Android para monitorear datos GPS a través de Bluetooth Low Energy 
     "sp": 25.3,       // Velocidad en km/h
     "sat": 8          // Satélites visibles
   }
-
+```
 **Firmware ESP32**
 Lee datos GPS a través de UART
 Formatea datos en JSON compacto
