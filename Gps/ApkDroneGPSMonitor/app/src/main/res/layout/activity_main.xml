@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/btn_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escanear dispositivos BLE"/>
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Estado: Desconectado"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/tv_lat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Latitud: --"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_lon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Longitud: --"/>
+
+    <TextView
+        android:id="@+id/tv_alt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Altitud: --"/>
+
+    <TextView
+        android:id="@+id/tv_speed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Velocidad: --"/>
+
+    <TextView
+        android:id="@+id/tv_satellites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Satélites: --"/>
+
+    <TextView
+        android:id="@+id/tv_raw_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Datos crudos: --" />
+</LinearLayout>
