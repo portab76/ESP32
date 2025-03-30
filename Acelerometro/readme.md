@@ -1,4 +1,4 @@
-# Documentación Completa: Visualización 3D con MPU6050
+# Visualización 3D con MPU6050
 
 ## Descripción del Proyecto
 Sistema para visualizar en tiempo real los datos de un sensor MPU6050 (acelerómetro y giroscopio) mediante una representación 3D en navegador web, incluyendo:
@@ -27,7 +27,7 @@ Configuración Software
   - ArduinoJson.h
   - math.h
 
-#Estructura del Proyecto
+##Estructura del Proyecto
 ```
 Acelerometro/
 ├── MPU6050/
@@ -65,7 +65,7 @@ angleX += (gyroX - offsetX) * deltaTime;
 angleX = α*(angleX + gyroX*Δt) + (1-α)*accelAngleX;
 ```
 
-**Formato de Datos
+##Formato de Datos
 El ESP32 envía datos en formato JSON:
 
 ```
@@ -75,11 +75,11 @@ El ESP32 envía datos en formato JSON:
 }
 ```
 
-#Uso
-Cargar firmware al ESP32
-
-Configurar credenciales WiFi
-
-Abrir interfaz web (cubo.html o recibir.html)
-
-Actualizar IP en los archivos HTML
+##Uso
+ 
+ - Cargar firmware al ESP32. 
+   - Configurar credenciales WiFi 
+   - Anota la IP que se muestra apor la consola del COM
+ 
+ - Abrir interfaz web (cubo.html o recibir.html)
+ - Actualizar IP en los archivos HTML
